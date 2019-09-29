@@ -1,0 +1,134 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+
+android {
+    compileSdkVersion 29
+    buildToolsVersion "29.0.0"
+    defaultConfig {
+        applicationId "com.example.onesns"
+        minSdkVersion 28
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    buildTypes {
+        debug {
+            ext.enableCrashlytics = false
+        }
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    flavorDimensions "stage", "mode"
+    productFlavors {
+        dev {
+            dimension "stage"
+            versionCode 100
+            //noinspection DevModeObsolete
+            minSdkVersion 21
+            aaptOptions.cruncherEnabled = false
+            resConfigs "ko", "xxhdpi"
+        }
+        prd {
+            dimension "stage"
+            versionCode new Date().format('yyMMddHHmm').toInteger()
+        }
+        free {
+            dimension "mode"
+        }
+        paid {
+            dimension "mode"
+        }
+    }
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            universalApk false
+        }
+    }
+    // 데이터바인딩을 허용하고 람다식 쓰기
+    android.variantFilter { variant ->
+        def buildName = variant.buildType.name;
+        def flavorName = variant.getFlavors().get(0).name;
+        if (flavorName == 'dev' && buildName == 'release'
+                || flavorName == 'prd' && buildName == 'debug') {
+            variant.setIgnore(true);
+        }
+        splits.abi.enable = (flavorName == 'prd');
+    }
+
+    dataBinding {
+        enabled = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    // 설정관련
+    //noinspection GradleCompatible
+    implementation 'com.android.support:preference-v7:28.0.0'
+    // jetpack
+    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
+    // meterial
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    // Country-picker
+    implementation 'com.hbb20:ccp:2.2.9'
+    // for stylist toast
+    implementation 'com.github.TheHasnatBD:SweetToast:1.0.2'
+    // Firebase
+    implementation 'com.google.firebase:firebase-analytics:17.2.0'
+    implementation 'com.google.firebase:firebase-auth:19.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-database:19.1.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.firebase:firebase-storage:19.0.1'
+    // FirebaseUI for Firebase Realtime Database
+    implementation 'com.firebaseui:firebase-ui-database:3.3.1'
+    //google login
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    // butterknife -> androidX 를 위해 10.1.0 이상을 사용하기위해
+    implementation 'com.jakewharton:butterknife:10.1.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
+    // circle imageView
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
+    // Navigation graph
+    implementation 'androidx.navigation:navigation-fragment:2.2.0-alpha03'
+    implementation 'androidx.navigation:navigation-ui:2.2.0-alpha03'
+    // recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    // kotlin
+    implementation "androidx.core:core-ktx:1.1.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    // glide
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
+    // remember text
+    implementation 'cn.zhaiyifan:rememberedittext:0.9.0'
+    // image Compressor library
+    implementation 'id.zelory:compressor:2.1.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+}
+apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}
