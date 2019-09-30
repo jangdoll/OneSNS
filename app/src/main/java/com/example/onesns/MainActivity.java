@@ -132,6 +132,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                navController.navigate(R.id.settingFragment);
                 break;
         }
+
+
+
+
         return true;
     }
 
