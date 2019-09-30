@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.onesns.chatHome.ChatMainActivity;
+import com.example.onesns.profileSetting.ProfileActivity;
 import com.google.android.material.navigation.NavigationView;
 
 import butterknife.BindView;
@@ -125,8 +126,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.action_search: // 친구
                 navController.navigate(R.id.searchFragment);
                 break;
-            case R.id.action_setting: // 친구
-                navController.navigate(R.id.settingFragment);
+            case R.id.action_setting: // 설정
+                Intent i = new Intent(this, ProfileActivity.class);
+                startActivity(i);
+//                navController.navigate(R.id.settingFragment);
                 break;
         }
         return true;

@@ -19,7 +19,6 @@
             android:background="@color/background"
             app:titleTextColor="@color/iconText"
             app:itemTextColor="@color/iconText"
-            app:layout_scrollFlags="scroll|noScroll"
             android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
         </androidx.appcompat.widget.Toolbar>

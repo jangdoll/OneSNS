@@ -3,13 +3,12 @@ package com.example.onesns.profileSetting;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -79,8 +78,20 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // 상태표시줄 색상 변경
+        View view = getWindow().getDecorView();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // 23 버전 이상일 때 상태바 하얀 색상, 회색 아이콘
+            view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            getWindow().setStatusBarColor(Color.parseColor("#f2f2f2"));
+        } else if (Build.VERSION.SDK_INT >= 21) {
+            // 21 버전 이상일 때 상태바 검은 색상, 흰색 아이콘
+            getWindow().setStatusBarColor(Color.BLACK);
+        }
 
         // glide
         mGlideRequestManager = Glide.with(getApplicationContext());
@@ -118,21 +129,6 @@ public class ProfileActivity extends AppCompatActivity {
         // 수정불가
         display_email.setFocusable(false);
         display_email.setClickable(false);
-
-        /* 언어변경 */
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String language = prefs.getString("language", "");
-        assert language != null;
-        // country code picker 언어 변경
-        if (language.equals("ko") || language.equals("한국어")) {
-            countryCodePicker.changeDefaultLanguage(CountryCodePicker.Language.KOREAN);
-
-        } else if (language.equals("en") || language.equals("English")) {
-            countryCodePicker.changeDefaultLanguage(CountryCodePicker.Language.ENGLISH);
-        }
-
-        // 상태표시줄 색상 변경
-        View view = getWindow().getDecorView();
 
         progressDialog = new ProgressDialog(this);
 
