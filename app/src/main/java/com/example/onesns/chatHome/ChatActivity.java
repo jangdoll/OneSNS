@@ -93,14 +93,13 @@ public class ChatActivity extends AppCompatActivity {
 
     private ProgressDialog progressDialog;
 
-    @SuppressLint("InflateParams")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        // for glide error
-        setTheme(R.style.AppTheme);
+            setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
-        mGlideRequestManager = Glide.with(ChatActivity.this);
+        setContentView(R.layout.chat_activity);
 
+        // 상태표시줄 색상 변경
         View view = getWindow().getDecorView();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             // 23 버전 이상일 때 상태바 하얀 색상, 회색 아이콘
@@ -110,6 +109,9 @@ public class ChatActivity extends AppCompatActivity {
             // 21 버전 이상일 때 상태바 검은 색상, 흰색 아이콘
             getWindow().setStatusBarColor(Color.BLACK);
         }
+
+        // for glide error
+        mGlideRequestManager = Glide.with(ChatActivity.this);
 
         // firebase
         rootReference = FirebaseDatabase.getInstance().getReference();
