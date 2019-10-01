@@ -21,8 +21,7 @@
         android:label="fragment_setting"
         tools:layout="@layout/fragment_setting" />
     <fragment
-        android:id="@+id/calenderFragment"
-        android:name="com.example.onesns.CalenderFragment"
-        android:label="fragment_calender"
-        tools:layout="@layout/fragment_calender" />
+        android:id="@+id/calendarFragment"
+        android:name="com.example.onesns.CalendarFragment"
+        android:label="CalendarFragment" />
 </navigation>
