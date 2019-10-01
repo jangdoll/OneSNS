@@ -177,7 +177,7 @@ public class LoginActivity extends AppCompatActivity {
             progressDialog.setMessage("회원가입 중입니다..");
             progressDialog.show();
             progressDialog.setCanceledOnTouchOutside(false);
-            
+
         }
     }
 
@@ -257,16 +257,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     //자동로그인
-//    @Override
-//    protected void onStart() {
-//        super.onStart();
-//        mUser = mAuth.getCurrentUser();
-//        if (!(mUser == null)) { // 유저 장보가 있다면 바로 MainActivity로 이동
-//            Intent i = new Intent(getApplicationContext(), MainActivity.class);
-//            startActivity(i);
-//            finish();
-//        }
-//    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        user = mAuth.getCurrentUser();
+        if (!(user == null)) { // 유저 장보가 있다면 바로 MainActivity로 이동
+            Intent i = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(i);
+            finish();
+        }
+    }
 
     // editText clearFocus [화면 클릭시 키보드 숨기기]
     public boolean dispatchTouchEvent(MotionEvent event) {

@@ -127,6 +127,8 @@ dependencies {
     // image Compressor library
     implementation 'id.zelory:compressor:2.1.0'
     implementation 'com.theartofdev.edmodo:android-image-cropper:2.8.0'
+
+    implementation 'com.github.applikeysolutions:cosmocalendar:1.0.4'
 }
 apply plugin: 'com.google.gms.google-services'
 repositories {

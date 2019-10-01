@@ -9,22 +9,23 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 
 
+
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CalenderFragment extends Fragment {
+public class CalendarFragment extends Fragment {
 
-
-    public CalenderFragment() {
+    public CalendarFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_calender, container, false);
+        View view =  inflater.inflate(R.layout.fragment_calendar, container, false);
+        return view;
     }
+
 
 }
