@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -44,23 +42,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
-
-        SearchView mSearchView;
-        mSearchView = (SearchView)toolbar.getMenu().findItem(R.id.menu_search).getActionView();
-        // SearchView 검색어 입력/ 검색 이벤트 처리
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                Toast.makeText(MainActivity.this, "[검색버튼클릭] 검색어 = "+ s, Toast.LENGTH_LONG).show();
-                return true;
-            }
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Toast.makeText(MainActivity.this, "입력하고있는 단어 = "+ s, Toast.LENGTH_LONG).show();
-
-                return true;
-            }
-        });
         return true;
     }
 
@@ -68,13 +49,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_search:
-                Toast.makeText(getApplicationContext(), "Search Click", Toast.LENGTH_SHORT).show();
+            case R.id.set_profile:
+                Intent i = new Intent(this, ProfileActivity.class);
+                startActivity(i);
                 return true;
             case R.id.chat:
                 Intent intent_cat = new Intent(this, ChatMainActivity.class);
                 startActivity(intent_cat);
-                Toast.makeText(getApplicationContext(), "Option Click", Toast.LENGTH_SHORT).show();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -121,15 +102,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navController.navigate(R.id.mainFragment);
                 break;
             case R.id.action_calendar: // 캘린더
-                navController.navigate(R.id.calenderFragment);
+                navController.navigate(R.id.calendarFragment);
                 break;
             case R.id.action_search: // 친구
                 navController.navigate(R.id.searchFragment);
                 break;
             case R.id.action_setting: // 설정
-                Intent i = new Intent(this, ProfileActivity.class);
-                startActivity(i);
-//                navController.navigate(R.id.settingFragment);
+                navController.navigate(R.id.settingFragment);
                 break;
         }
 
