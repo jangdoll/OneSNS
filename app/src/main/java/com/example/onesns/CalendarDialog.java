@@ -13,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+
 import xyz.hasnat.sweettoast.SweetToast;
 
 public class CalendarDialog {
@@ -35,12 +37,13 @@ public class CalendarDialog {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         // 커스텀 다이얼로그의 레이아웃을 설정한다.
         dlg.setContentView(R.layout.calendar_dialog);
+
         // 커스텀 다이얼로그를 노출한다.
         dlg.show();
 
         // 커스텀 다이얼로그의 각 위젯들을 정의한다.
-        final EditText title = dlg.findViewById(R.id.title);
-        final EditText detail = dlg.findViewById(R.id.detail);
+        EditText title = dlg.findViewById(R.id.title);
+        EditText detail = dlg.findViewById(R.id.detail);
         final Button okButton = dlg.findViewById(R.id.okButton);
         final Button cancelButton = dlg.findViewById(R.id.cancelButton);
 
@@ -53,12 +56,14 @@ public class CalendarDialog {
             // firebase
             mAuth = FirebaseAuth.getInstance();
             String user_id = mAuth.getCurrentUser().getUid();
-            storeDefaultDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child("calendar").child(user_id);
-            storeDefaultDatabaseReference.child("cal_title").setValue(cal_title);
-            storeDefaultDatabaseReference.child("cal_detail").setValue(cal_detail);
-            storeDefaultDatabaseReference.child("days").setValue(cal_days);
+            HashMap<String, Object> calendar_body = new HashMap<>();
+                    calendar_body.put("title", cal_title);
+                    calendar_body.put("detail", cal_detail);
+                    calendar_body.put("days", cal_days);
+            FirebaseDatabase.getInstance().getReference().child("calendar").child(user_id).push().setValue(calendar_body);
 
             SweetToast.success(context, "일정을 추가 하였습니다..");
+
             // 커스텀 다이얼로그를 종료한다.
             dlg.dismiss();
         });
