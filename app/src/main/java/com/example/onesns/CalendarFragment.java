@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -77,7 +76,7 @@ public class CalendarFragment extends Fragment {
                         String title = (String) dataSnapshot.child("title").getValue();
                         String detail = (String) dataSnapshot.child("detail").getValue();
                         String days = (String) dataSnapshot.child("days").getValue();
-                        Toast.makeText(getContext(), title + "\n" + detail + "\n" + days, Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getContext(), title + "\n" + detail + "\n" + days, Toast.LENGTH_SHORT).show();
 
 //                    HashMap<String, Object> calendar_body = new HashMap<>();
 //                    calendar_body.put("title", dataSnapshot.child("cal_title").getValue());
