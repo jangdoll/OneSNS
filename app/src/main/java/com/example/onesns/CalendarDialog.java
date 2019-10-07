@@ -35,7 +35,6 @@ public class CalendarDialog {
         dlg.requestWindowFeature(Window.FEATURE_NO_TITLE);
         // 커스텀 다이얼로그의 레이아웃을 설정한다.
         dlg.setContentView(R.layout.calendar_dialog);
-
         // 커스텀 다이얼로그를 노출한다.
         dlg.show();
 
@@ -50,8 +49,8 @@ public class CalendarDialog {
             String cal_days = prefs.getString("day", "");
             String cal_title = title.getText().toString();
             String cal_detail = detail.getText().toString();
-            // firebase
 
+            // firebase
             mAuth = FirebaseAuth.getInstance();
             String user_id = mAuth.getCurrentUser().getUid();
             storeDefaultDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child("calendar").child(user_id);
@@ -59,9 +58,7 @@ public class CalendarDialog {
             storeDefaultDatabaseReference.child("cal_detail").setValue(cal_detail);
             storeDefaultDatabaseReference.child("days").setValue(cal_days);
 
-
             SweetToast.success(context, "일정을 추가 하였습니다..");
-
             // 커스텀 다이얼로그를 종료한다.
             dlg.dismiss();
         });
