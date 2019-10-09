@@ -26,10 +26,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,7 +47,7 @@ public class CalendarFragment extends Fragment {
     CalendarView calendarView;
 
     // firebase
-    DatabaseReference getcalendarDatabaseReference;
+    DatabaseReference getcalendarDatabaseReference, getUserDatabaseReference;
     FirebaseAuth mAuth;
     StorageReference mCalendar;
     FloatingActionButton button_add;
@@ -62,60 +66,70 @@ public class CalendarFragment extends Fragment {
         String user_id = mAuth.getCurrentUser().getUid();
         getcalendarDatabaseReference = FirebaseDatabase.getInstance().getReference().child("calendar").child(user_id);
         String myRef = getcalendarDatabaseReference.getKey();
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
 
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        FirebaseDatabase.getInstance().getReference().child("calendar").child(user_id)
-                .addChildEventListener(new ChildEventListener() {
+        getUserDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user_id);
+        getUserDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                if (dataSnapshot.exists()) {
-                    for(int i =0;  i < dataSnapshot.getChildrenCount()-2; i++) {
-                        String title = (String) dataSnapshot.child("title").getValue();
-                        String detail = (String) dataSnapshot.child("detail").getValue();
-                        String days = (String) dataSnapshot.child("days").getValue();
-//                        Toast.makeText(getContext(), title + "\n" + detail + "\n" + days, Toast.LENGTH_SHORT).show();
+            public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                String user_email = (String) dataSnapshot.child("user_email").getValue();
+                FirebaseDatabase.getInstance().getReference().child("calendar").orderByChild("user_email").equalTo(user_email)
+                        .addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                if (dataSnapshot.exists()) {
+                                    String title = (String) dataSnapshot.child("title").getValue();
+                                    String detail = (String) dataSnapshot.child("detail").getValue();
+                                    String days = (String) dataSnapshot.child("days").getValue();
 
-//                    HashMap<String, Object> calendar_body = new HashMap<>();
-//                    calendar_body.put("title", dataSnapshot.child("cal_title").getValue());
-//                    calendar_body.put("detail", dataSnapshot.child("cal_detail").getValue());
-//                    calendar_body.put("days", dataSnapshot.child("days").getValue());
+                                    dataList.add(new CalendarItem(title, detail, days));
+                                    CalendarAdapter adapter = new CalendarAdapter(dataList);
+                                    recyclerView.setAdapter(adapter);
 
+                                }
+                            }
 
-                        dataList.add(new CalendarItem(title, detail, days));
-                        CalendarAdapter adapter = new CalendarAdapter(dataList);
-                        recyclerView.setAdapter(adapter);
-                    }
-                }
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+
             }
-
             @Override
-            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
+
+
 
         calendarView = view.findViewById(R.id.calendarView);
         button_add = view.findViewById(R.id.button_add);
         calendarView.dispatchSetSelected(false);
         button_add.setOnClickListener(view1 -> {
             List<java.util.Calendar> days = calendarView.getSelectedDates();
+
+
+            long now = System.currentTimeMillis();
+            Date date = new Date(now);
+            SimpleDateFormat day1 = new SimpleDateFormat("MM월 dd일 kk시 mm분");
+            String postTime = day1.format(date);
 
             String result = "";
             for (int i = 0; i < days.size(); i++) {
@@ -136,6 +150,7 @@ public class CalendarFragment extends Fragment {
                 SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(Objects.requireNonNull(getActivity()));
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("day", result);
+                editor.putString("postTime", postTime);
                 editor.apply();
             }
         });

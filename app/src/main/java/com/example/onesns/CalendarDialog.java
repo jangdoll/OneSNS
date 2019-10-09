@@ -9,9 +9,16 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
+
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
@@ -50,17 +57,34 @@ public class CalendarDialog {
         okButton.setOnClickListener(view -> {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             String cal_days = prefs.getString("day", "");
+            String post_day = prefs.getString("postTime", "");
             String cal_title = title.getText().toString();
             String cal_detail = detail.getText().toString();
 
             // firebase
             mAuth = FirebaseAuth.getInstance();
             String user_id = mAuth.getCurrentUser().getUid();
-            HashMap<String, Object> calendar_body = new HashMap<>();
+
+            getUserDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user_id);
+            getUserDatabaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+                    String name = (String) dataSnapshot.child("user_name").getValue();
+                    String user_email = (String) dataSnapshot.child("user_email").getValue();
+
+                    HashMap<String, Object> calendar_body = new HashMap<>();
+                    calendar_body.put("postTime", post_day);
                     calendar_body.put("title", cal_title);
                     calendar_body.put("detail", cal_detail);
                     calendar_body.put("days", cal_days);
-            FirebaseDatabase.getInstance().getReference().child("calendar").child(user_id).push().setValue(calendar_body);
+                    calendar_body.put("user_email", user_email);
+                    calendar_body.put("nickname", name);
+                    FirebaseDatabase.getInstance().getReference().child("calendar").push().setValue(calendar_body);
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) { }
+            });
+
 
             SweetToast.success(context, "일정을 추가 하였습니다..");
 
