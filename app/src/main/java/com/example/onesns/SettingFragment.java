@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ public class SettingFragment extends Fragment {
     //firebase
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    TextView tv_email;
     public SettingFragment() {
         // Required empty public constructor
     }
@@ -34,9 +36,12 @@ public class SettingFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
         mAuth = FirebaseAuth.getInstance(); //firebase 인스턴스 가져오기
+        tv_email = view.findViewById(R.id.tv_email);
 
         //사용자 정보 가져오기
-        currentUser = FirebaseAuth.getInstance().getCurrentUser(); // 현재 로그인 되어있는 사용자의 정보
+        currentUser = mAuth.getCurrentUser(); // 현재 로그인 되어있는 사용자의 정보
+
+        tv_email.setText(currentUser.getEmail());
 
         return view;
     }

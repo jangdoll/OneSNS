@@ -104,9 +104,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.action_calendar: // 캘린더
                 navController.navigate(R.id.calendarFragment);
                 break;
-            case R.id.action_search: // 친구
-                navController.navigate(R.id.searchFragment);
-                break;
             case R.id.action_setting: // 설정
                 navController.navigate(R.id.settingFragment);
                 break;

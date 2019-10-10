@@ -14,12 +14,6 @@
         android:title="Calendar"/>
 
     <item
-        android:id="@+id/action_search"
-        android:enabled="true"
-        android:icon="@drawable/ic_supervisor_account_black_24dp"
-        android:title="Search"/>
-
-    <item
         android:id="@+id/action_setting"
         android:enabled="true"
         android:icon="@drawable/ic_dehaze_black_24dp"
