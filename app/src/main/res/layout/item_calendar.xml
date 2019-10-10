@@ -8,6 +8,7 @@
     android:layout_margin="8dp"
     app:cardCornerRadius="20dp"
     app:cardElevation="4dp"
+    app:cardBackgroundColor="?attr/cardbackground"
     app:contentPadding="8dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +16,7 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:textColor="?attr/tintcolor"
             android:id="@+id/text_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -28,6 +30,7 @@
             tools:text="제목" />
 
         <TextView
+            android:textColor="?attr/tintcolor"
             android:id="@+id/text_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -41,6 +44,7 @@
             tools:text="내용" />
 
         <TextView
+            android:textColor="?attr/tintcolor"
             android:id="@+id/text_days"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
