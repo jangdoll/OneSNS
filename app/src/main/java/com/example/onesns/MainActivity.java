@@ -2,6 +2,7 @@ package com.example.onesns;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import androidx.navigation.ui.NavigationUI;
 import com.example.onesns.chatHome.ChatMainActivity;
 import com.example.onesns.profileSetting.ProfileActivity;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        SharedPreferences sharedPreferences = Objects.requireNonNull(this).getSharedPreferences("change_theme", MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("dark_theme", false)) {
+            this.setTheme(R.style.darktheme);
+        } else {
+            this.setTheme(R.style.AppTheme);
+        }
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:background="?attr/backgroundcolor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
@@ -16,7 +17,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/background"
+            android:background="?attr/barbackground"
             app:titleTextColor="@color/iconText"
             app:itemTextColor="@color/iconText"
             android:theme="@style/ThemeOverlay.AppCompat.Dark">
@@ -37,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@color/background"
+            android:background="?attr/barbackground"
             app:itemIconTint="@color/iconText"
             app:itemTextColor="@color/iconText"
             app:menu="@menu/bottom_navigation_menu" />

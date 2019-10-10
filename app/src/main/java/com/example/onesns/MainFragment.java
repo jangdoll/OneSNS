@@ -1,6 +1,7 @@
 package com.example.onesns;
 
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 /**
@@ -34,6 +38,12 @@ public class MainFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SharedPreferences sharedPreferences = Objects.requireNonNull(getActivity()).getSharedPreferences("change_theme", MODE_PRIVATE);
+        if (sharedPreferences.getBoolean("dark_theme", false)) {
+            getActivity().setTheme(R.style.darktheme);
+        } else {
+            getActivity().setTheme(R.style.AppTheme);
+        }
         View view = inflater.inflate(R.layout.fragment_main, container, false);
 
         // firebase

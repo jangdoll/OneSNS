@@ -5,20 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SearchFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.applikeysolutions.cosmocalendar.view.CalendarView
         android:id="@+id/calendarView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
         app:orientation="horizontal"
         app:calendarBackgroundColor="@color/trans"
-        app:otherDayTextColor="@color/colorLightGray"
-        app:dayTextColor="@color/black"
+        app:otherDayTextColor="?attr/sideMenuColor"
+        app:dayTextColor="?attr/tintcolor"
         app:firstDayOfTheWeek="sunday"
         app:selectionType="single"
-        app:selectedDayTextColor="@color/white">
+        app:selectedDayTextColor="?attr/sideMenuColor">
 
     </com.applikeysolutions.cosmocalendar.view.CalendarView>
 
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:tint="@color/white"
-        android:backgroundTint="@color/background"
+        android:backgroundTint="?attr/barbackground"
         android:layout_alignEnd="@id/calendarView"
         app:borderWidth="0dp"
         app:elevation="6dp"
