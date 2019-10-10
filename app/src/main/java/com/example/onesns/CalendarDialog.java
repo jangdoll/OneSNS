@@ -63,22 +63,23 @@ public class CalendarDialog {
 
             // firebase
             mAuth = FirebaseAuth.getInstance();
-            String user_id = mAuth.getCurrentUser().getUid();
+            String user_uid = mAuth.getCurrentUser().getUid();
 
-            getUserDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user_id);
+            getUserDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user_uid);
             getUserDatabaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
                     String name = (String) dataSnapshot.child("user_name").getValue();
-                    String user_email = (String) dataSnapshot.child("user_email").getValue();
+                    String user_image = (String) dataSnapshot.child("user_image").getValue();
 
                     HashMap<String, Object> calendar_body = new HashMap<>();
                     calendar_body.put("postTime", post_day);
                     calendar_body.put("title", cal_title);
                     calendar_body.put("detail", cal_detail);
                     calendar_body.put("days", cal_days);
-                    calendar_body.put("user_email", user_email);
+                    calendar_body.put("user_uid", user_uid);
                     calendar_body.put("nickname", name);
+                    calendar_body.put("user_image", user_image);
                     FirebaseDatabase.getInstance().getReference().child("calendar").push().setValue(calendar_body);
                 }
                 @Override

@@ -33,7 +33,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class MainFragment extends Fragment {
 
     FirebaseAuth mAuth;
-    DatabaseReference rootReference;
+    DatabaseReference rootReference, userReferce;
     List<FeedItem> feed_dataList = new ArrayList<>();
 
     @Override
@@ -49,7 +49,7 @@ public class MainFragment extends Fragment {
         // firebase
         rootReference = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
-        String user_id = mAuth.getCurrentUser().getUid();
+        String user_uid = mAuth.getCurrentUser().getUid();
 
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         mLayoutManager.setReverseLayout(true);
@@ -60,43 +60,59 @@ public class MainFragment extends Fragment {
         feed_recyclerView.setLayoutManager(feed_layoutManager);
         feed_recyclerView.setLayoutManager(mLayoutManager);
 
-        FirebaseDatabase.getInstance().getReference().child("calendar")
-                .addChildEventListener(new ChildEventListener() {
-                    @Override
-                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        if (dataSnapshot.exists()) {
-                            String title = (String) dataSnapshot.child("title").getValue();
-                            String detail = (String) dataSnapshot.child("detail").getValue();
-                            String days = (String) dataSnapshot.child("days").getValue();
-                            String user_name = (String) dataSnapshot.child("nickname").getValue();
-                            String postTime = (String) dataSnapshot.child("postTime").getValue();
 
-                            feed_dataList.add(new FeedItem(title, detail, days, user_name, postTime));
-                            FeedAdapter feed_adapter = new FeedAdapter(feed_dataList);
-                            feed_recyclerView.setAdapter(feed_adapter);
-                        }
-                    }
+//        FirebaseDatabase.getInstance().getReference().child("friends").orderByChild(user_uid).equalTo(user_uid)
+//                .addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
+//
+//                DatabaseReference uid = dataSnapshot.getRef();
+//
 
-                    @Override
-                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                FirebaseDatabase.getInstance().getReference().child("calendar")
+                        .addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                                if (dataSnapshot.exists()) {
+                                    String title = (String) dataSnapshot.child("title").getValue();
+                                    String detail = (String) dataSnapshot.child("detail").getValue();
+                                    String days = (String) dataSnapshot.child("days").getValue();
+                                    String user_name = (String) dataSnapshot.child("nickname").getValue();
+                                    String postTime = (String) dataSnapshot.child("postTime").getValue();
+                                    String user_image = (String) dataSnapshot.child("user_image").getValue();
 
-                    }
+                                    feed_dataList.add(new FeedItem(title, detail, days, user_name, postTime, user_image));
+                                    FeedAdapter feed_adapter = new FeedAdapter(feed_dataList);
+                                    feed_recyclerView.setAdapter(feed_adapter);
+                                }
+                            }
 
-                    @Override
-                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
-                    }
+                            }
 
-                    @Override
-                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
 
-                    }
+                            }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                    }
-                });
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
 
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+//            }
+
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
 
         return view;
     }

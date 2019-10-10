@@ -63,20 +63,19 @@ public class CalendarFragment extends Fragment {
         rootReference = FirebaseDatabase.getInstance().getReference();
 
         mAuth = FirebaseAuth.getInstance();
-        String user_id = mAuth.getCurrentUser().getUid();
-        getcalendarDatabaseReference = FirebaseDatabase.getInstance().getReference().child("calendar").child(user_id);
+        String user_uid = mAuth.getCurrentUser().getUid();
+        getcalendarDatabaseReference = FirebaseDatabase.getInstance().getReference().child("calendar").child(user_uid);
         String myRef = getcalendarDatabaseReference.getKey();
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerview);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(layoutManager);
 
-        getUserDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user_id);
+        getUserDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user_uid);
         getUserDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NotNull DataSnapshot dataSnapshot) {
-                String user_email = (String) dataSnapshot.child("user_email").getValue();
-                FirebaseDatabase.getInstance().getReference().child("calendar").orderByChild("user_email").equalTo(user_email)
+                FirebaseDatabase.getInstance().getReference().child("calendar").orderByChild("user_uid").equalTo(user_uid)
                         .addChildEventListener(new ChildEventListener() {
                             @Override
                             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
@@ -113,10 +112,11 @@ public class CalendarFragment extends Fragment {
                         });
 
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) { }
-        });
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
 
 
         calendarView = view.findViewById(R.id.calendarView);
@@ -141,9 +141,9 @@ public class CalendarFragment extends Fragment {
                 String day_full = year + "년 " + (month + 1) + "월 " + day + "일 " + week + "요일";
                 result += (day_full);
             }
-            if(result.equals("")) {
+            if (result.equals("")) {
                 SweetToast.error(getContext(), "날짜를 선택해 주세요.");
-            }else {
+            } else {
                 CalendarDialog calendarDialog = new CalendarDialog(getActivity());
                 calendarDialog.save();
 
