@@ -16,11 +16,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -34,6 +42,8 @@ public class SettingFragment extends Fragment {
     FirebaseUser currentUser;
     TextView tv_email;
     Switch myswitch;
+    CircleImageView profileimage;
+    DatabaseReference getUserDatabaseReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,12 +59,34 @@ public class SettingFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance(); //firebase 인스턴스 가져오기
         tv_email = view.findViewById(R.id.tv_email);
+        profileimage = view.findViewById(R.id.img_user_profile);
 
 
         //사용자 정보 가져오기
         currentUser = mAuth.getCurrentUser(); // 현재 로그인 되어있는 사용자의 정보
+        mAuth = FirebaseAuth.getInstance();
+        String user_uid = mAuth.getCurrentUser().getUid();
+
+        getUserDatabaseReference = FirebaseDatabase.getInstance().getReference().child("users").child(user_uid);
+        getUserDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String user_image = (String) dataSnapshot.child("user_image").getValue();
+                Glide.with(getActivity())
+                        .load(user_image)
+                        .placeholder(R.drawable.default_profile_image)
+                        .into(profileimage);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         tv_email.setText(currentUser.getEmail());
+
 
         myswitch = view.findViewById(R.id.myswitch);
         // 테마
